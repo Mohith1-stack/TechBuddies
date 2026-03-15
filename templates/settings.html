@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Settings</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="{{ session.get('theme','light') }}">
+
+    <h2>Settings</h2>
+
+    <h3>Profile Settings</h3>
+
+    <form method="POST" action="/update_profile">
+        <input type="text" name="username" value="{{ user.username }}" required>
+        <button type="submit">Update Username</button>
+    </form>
+
+
+    <h3>Change Password</h3>
+
+    <form method="POST" action="/change_password">
+        <input type="password" name="old_password" placeholder="Current Password" required>
+        <input type="password" name="new_password" placeholder="New Password" required>
+        <button type="submit">Change Password</button>
+    </form>
+
+
+    <h3>Theme Mode</h3>
+
+    <form method="POST" action="/theme">
+        <select name="theme">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+
+        <button type="submit">Save Theme</button>
+    </form>
+
+
+    <h3>System Settings</h3>
+
+    <form method="POST" action="/system_settings">
+        <input type="number" name="students_per_page" placeholder="Students per page">
+        <button type="submit">Save</button>
+    </form>
+
+    <h3>Logout</h3>
+
+    <a href="/logout">
+        <button>Logout</button>
+    </a>
+
+</body>
+
+</html>
