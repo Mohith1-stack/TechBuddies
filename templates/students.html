@@ -69,6 +69,8 @@
                 {% else %}
 
                 {{ student.name }}
+                {{ student.age }}
+                {{ student.course }}
 
                 {% endif %}
 
@@ -95,11 +97,11 @@
     <div style="margin-top:20px;">
 
         {% if students.has_prev %}
-        <a href="?page={{ students.prev_num }}">⬅ Previous</a>
+        <a href="?page={{ students.prev_num }}">Previous</a>
         {% endif %}
 
         {% if students.has_next %}
-        <a href="?page={{ students.next_num }}">Next ➡</a>
+        <a href="?page={{ students.next_num }}">Next</a>
         {% endif %}
 
     </div>

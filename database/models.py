@@ -1,9 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
 db = SQLAlchemy()
-
-# User table
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -11,18 +7,12 @@ class User(db.Model):
     email = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
-# Task table
-
-
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     deadline = db.Column(db.String(50))
     status = db.Column(db.String(20), default="pending")
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-# Stress level table
-
 
 class StressLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
