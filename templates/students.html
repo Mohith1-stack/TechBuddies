@@ -1,124 +1,116 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <title>Student Management</title>
+<div class="main-container">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <head>
+        <title>Student Management</title>
 
-</head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<body class="{{ session.get('theme','light') }}">
+    </head>
 
-    <a href="/dashboard">Dashboard</a>
+    <body class="{{ 'dark' if session.get('theme') == 'dark' else '' }}">
 
-    <a href="/export">Export Students</a>
-
-    <a href="/attendance">Attendance</a>
+        {% include 'navbar.html' %}
 
 
-    <a href="/settings">Settings</a>
+        <h2>Student Management System</h2>
+
+        <form action="/add" method="POST" class="form-row">
+
+            <input type="text" name="name" placeholder="Student Name" required>
+
+            <input type="number" name="age" placeholder="Age" required>
+
+            <input type="text" name="course" placeholder="Course" required>
+
+            <button type="submit">Add Student</button>
+
+        </form>
 
 
+        <h3>Search a particular student ?</h3>
+        <form action="/search" method="GET">
+            <input type="text" name="query" value="{{ query or '' }}" placeholder="Search student">
+            <button type="submit">Search</button>
+        </form>
 
-    <h2>Student Management System</h2>
+        <h4>Student List</h4>
 
-    <form action="/add" method="POST">
+        <table style="border-collapse: collapse;" border="1">
 
-        <input type="text" name="name" placeholder="Student Name" required>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Course</th>
+                <th>Actions</th>
+            </tr>
 
-        <input type="number" name="age" placeholder="Age" required>
+            {% for student in students.items %}
 
-        <input type="text" name="course" placeholder="Course" required>
+            <tr>
 
-        <button type="submit">Add Student</button>
+                <td>{{ student.id }}</td>
 
-    </form>
+                <td>
 
+                    {% if query and query.lower() in student.name.lower() %}
+                    {{ student.name | replace(query, "<mark>" + query + "</mark>") | safe }}
+                    {% else %}
+                    {{ student.name }}
+                    {% endif %}
 
-    <h3>Search a particular student ?</h3>
-    <form action="/search" method="GET">
-        <input type="text" name="query" value="{{ query or '' }}" placeholder="Search student">
-        <button type="submit">Search</button>
-    </form>
+                </td>
 
-    <h4>Student List</h4>
+                <td>{{ student.age }}</td>
 
-    <table style="border-collapse: collapse;" border="1">
+                <td>{{ student.course }}</td>
 
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Course</th>
-            <th>Actions</th>
-        </tr>
+                <td>
 
-        {% for student in students.items %}
+                    <a href="/edit/{{ student.id }}">Edit</a>
 
-        <tr>
+                    <a href="/delete/{{ student.id }}">Delete</a>
 
-            <td>{{ student.id }}</td>
+                </td>
 
-            <td>
+            </tr>
 
-                {% if query and query.lower() in student.name.lower() %}
+            {% endfor %}
 
-                {{ student.name | replace(query, "<mark>" + query + "</mark>") | safe }}
+        </table>
 
-                {% else %}
+        <div style="margin-top:20px;">
 
-                {{ student.name }}
-                {{ student.age }}
-                {{ student.course }}
+            {% if students.has_prev %}
+            <a href="?page={{ students.prev_num }}">Previous</a>
+            {% endif %}
 
-                {% endif %}
+            {% if students.has_next %}
+            <a href="?page={{ students.next_num }}">Next</a>
+            {% endif %}
 
-            </td>
+        </div>
 
-            <td>{{ student.age }}</td>
+        <div>
 
-            <td>{{ student.course }}</td>
+            {% if students.has_prev %}
+            <a href="?page={{ students.prev_num }}">Previous</a>
+            {% endif %}
 
-            <td>
+            {% if students.has_next %}
+            <a href="?page={{ students.next_num }}">Next</a>
+            {% endif %}
 
-                <a href="/edit/{{ student.id }}">Edit</a>
+        </div>
 
-                <a href="/delete/{{ student.id }}">Delete</a>
-
-            </td>
-
-        </tr>
-
-        {% endfor %}
-
-    </table>
-
-    <div style="margin-top:20px;">
-
-        {% if students.has_prev %}
-        <a href="?page={{ students.prev_num }}">Previous</a>
-        {% endif %}
-
-        {% if students.has_next %}
-        <a href="?page={{ students.next_num }}">Next</a>
-        {% endif %}
-
-    </div>
-
-    <div>
-
-        {% if students.has_prev %}
-        <a href="?page={{ students.prev_num }}">Previous</a>
-        {% endif %}
-
-        {% if students.has_next %}
-        <a href="?page={{ students.next_num }}">Next</a>
-        {% endif %}
-
-    </div>
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 
-</body>
+    </body>
+
+</div>
 
 </html>

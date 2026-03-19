@@ -44,7 +44,6 @@ def add_student():
     db.session.commit()
     return redirect("/")
 
-
 @app.route("/delete/<int:id>")
 def delete_student(id):
     student = Student.query.get(id)
@@ -63,6 +62,7 @@ def edit_student(id):
         return redirect("/")
     return render_template("edit_student.html", student=student)
 
+from datetime import datetime
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -72,9 +72,10 @@ def login():
         user = User.query.filter_by(username=username, password=password).first()
         if user:
             session["user"] = username
+            user.last_login = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            db.session.commit()
             return redirect("/")
     return render_template("login.html")
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -90,25 +91,6 @@ def register():
         return redirect("/login")
     return render_template("register.html")
 
-
-@app.route("/dashboard")
-def dashboard():
-    students = Student.query.all()
-    total_students = len(students)
-    if total_students > 0:
-        avg_age = sum([s.age for s in students]) / total_students
-    else:
-        avg_age = 0
-    courses = set([s.course for s in students])
-    total_courses = len(courses)
-    return render_template(
-        "dashboard.html",
-        total_students=total_students,
-        avg_age=avg_age,
-        total_courses=total_courses
-    )
-
-
 @app.route("/export")
 def export_students():
     students = Student.query.all()
@@ -122,11 +104,6 @@ def export_students():
         headers={"Content-Disposition": "attachment;filename=students.csv"}
     )
 
-@app.route("/settings")
-def settings():
-    user = User.query.first()
-    return render_template("settings.html", user=user)
-
 @app.route("/update_profile", methods=["POST"])
 def update_profile():
     username = request.form["username"]
@@ -134,6 +111,7 @@ def update_profile():
     user.username = username
     db.session.commit()
     return redirect("/settings")
+
 @app.route("/change_password", methods=["POST"])
 def change_password():
     old_password = request.form["old_password"]
@@ -183,6 +161,38 @@ def attendance():
         report=report,
         monthly_records=monthly_records
     )
+
+@app.route("/dashboard")
+def dashboard():
+    students = Student.query.all()
+
+    total_students = len(students)
+    avg_age = sum([s.age for s in students]) / total_students if total_students else 0
+    total_courses = len(set([s.course for s in students]))
+
+    from collections import Counter
+    courses = [s.course for s in students]
+    popular_course = Counter(courses).most_common(1)[0][0] if courses else "None"
+
+    latest_student = Student.query.order_by(Student.id.desc()).first()
+    user = User.query.first()
+    last_login = getattr(user, "last_login", "No data")
+
+    return render_template(
+        "dashboard.html",
+        total_students=total_students,
+        avg_age=avg_age,
+        total_courses=total_courses,
+        popular_course=popular_course,
+        latest_student=latest_student,
+        last_login=last_login
+    )
+
+@app.route("/settings")
+def settings():
+    user = User.query.first()
+    return render_template("settings.html", user=user)
+
 
 @app.route("/save_attendance", methods=["POST"])
 def save_attendance():
