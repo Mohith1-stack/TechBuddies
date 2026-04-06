@@ -62,7 +62,7 @@ def edit_student(id):
         return redirect("/")
     return render_template("edit_student.html", student=student)
 
-from datetime import datetime
+from datetime import datetime 
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -165,9 +165,14 @@ def attendance():
 @app.route("/dashboard")
 def dashboard():
     students = Student.query.all()
-
+    
     total_students = len(students)
-    avg_age = sum([s.age for s in students]) / total_students if total_students else 0
+    ages = [s.age for s in students]
+    if ages:
+        avg_age = round(sum(ages) / len(ages))
+    else:
+        avg_age = 0
+    
     total_courses = len(set([s.course for s in students]))
 
     from collections import Counter
