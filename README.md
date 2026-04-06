@@ -39,10 +39,11 @@ A comprehensive web-based Student Management System built with **Flask**, **SQLA
 
 | Layer | Technology |
 |-------|-----------|
+| **Frontend** | HTML5, CSS3, JavaScript |
 | **Backend** | Flask (Python) |
 | **Database** | SQLite with SQLAlchemy ORM |
-| **Frontend** | HTML5, CSS3, JavaScript |
 | **Architecture** | MVC Pattern |
+| **Version Control** | Git |
 
 ---
 
@@ -58,39 +59,171 @@ A comprehensive web-based Student Management System built with **Flask**, **SQLA
    ```bash
    git clone https://github.com/Mohith1-stack/TechBuddies.git
    cd TechBuddies
+   ```
 
-2. **Install the required dependencies:**
+2. **Create a virtual environment**
    ```bash
-   npm install
-3. **Run the application:**
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. **Install dependencies**
    ```bash
-   npm start
-## Tech Stack
-Frontend: React.js
-Backend: Node.js and Express
-Database: MongoDB
-Version Control: Git
-## API Routes
-GET /api/users: Retrieve a list of users.
-POST /api/users: Create a new user profile.
-GET /api/resources: Fetch available resources.
-POST /api/resources: Submit a new resource.
-## Database Schema
-User Schema
-name: String
-email: String
-password: String
-projects: Array
-Resource Schema
-title: String
-url: String
-description: String
-author: String
-## Project Information
-TechBuddies is built as part of an initiative to enhance collaboration within the tech community. Our goal is to continually improve and expand the platform based on user feedback and technological advancements.
+   pip install Flask Flask-SQLAlchemy
+   ```
 
-## Contributing
-We welcome contributions from the community! Please read our contributing guidelines for more information.
+4. **Run the application**
+   ```bash
+   python app.py
+   ```
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+5. **Access the application**
+   - Open your browser and navigate to `http://localhost:5000`
+   - Register a new account or login with existing credentials
+
+---
+
+## 📁 Project Structure
+
+```
+TechBuddies/
+├── app.py                 # Main Flask application with routes
+├── models.py              # Database models (Student, User, Attendance)
+├── requirements.txt       # Project dependencies
+├── templates/             # HTML templates
+│   ├── login.html
+���   ├── register.html
+│   ├── students.html
+│   ├── attendance.html
+│   ├── dashboard.html
+│   ├── settings.html
+│   └── edit_student.html
+├── static/                # CSS, JavaScript, and assets
+└── database/              # Database files
+```
+
+---
+
+## 🚀 API Routes
+
+| Route | Method | Description |
+|-------|--------|------------|
+| `/` | GET | Dashboard/Student list |
+| `/login` | GET, POST | User authentication |
+| `/register` | GET, POST | Account creation |
+| `/add` | POST | Add new student |
+| `/edit/<id>` | GET, POST | Edit student details |
+| `/delete/<id>` | GET | Delete student |
+| `/search` | GET | Search students |
+| `/attendance` | GET, POST | View/mark attendance |
+| `/save_attendance` | POST | Save attendance records |
+| `/export` | GET | Export students as CSV |
+| `/settings` | GET | User settings page |
+| `/update_profile` | POST | Update user profile |
+| `/change_password` | POST | Change user password |
+| `/theme` | POST | Toggle theme |
+| `/dashboard` | GET | View analytics dashboard |
+| `/logout` | GET | User logout |
+
+---
+
+## 💾 Database Schema
+
+### Student Table
+- **id**: Integer - Primary key
+- **name**: String - Student name
+- **age**: Integer - Student age
+- **course**: String - Enrolled course
+
+### User Table
+- **id**: Integer - Primary key
+- **username**: String - Unique username
+- **password**: String - User password
+- **last_login**: String - Last login timestamp
+
+### Attendance Table
+- **id**: Integer - Primary key
+- **student_id**: Integer - Foreign key (references Student)
+- **date**: String - Attendance date
+- **status**: String - Attendance status (Present/Absent)
+
+---
+
+## 🔑 Key Functionalities
+
+### Authentication Flow
+1. User registers with username and password
+2. Credentials validated and stored in database
+3. User logs in with credentials
+4. Session created for user navigation
+5. User must be logged in to access protected pages
+
+### Attendance Workflow
+1. View all students on attendance page
+2. Mark attendance for each student
+3. Submit attendance records
+4. View historical records by month
+5. Download attendance reports as CSV
+
+### Dashboard Insights
+- **Total Students**: Count of all enrolled students
+- **Average Age**: Calculated from all student records
+- **Course Distribution**: Number of unique courses
+- **Popular Course**: Most enrolled course
+- **Latest Enrollment**: Most recently added student
+
+---
+
+## 🎨 User Interface
+
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Intuitive Navigation**: Clear navbar and menu structure
+- **Theme Support**: Dark/Light mode for comfortable viewing
+- **Visual Feedback**: Status messages and confirmations
+- **Clean Cards Layout**: Modern card-based design for data presentation
+
+---
+
+## 🔒 Security Features
+
+- Session-based authentication
+- Password storage (Note: Consider hashing passwords in production)
+- CSRF protection ready
+- SQL injection prevention through SQLAlchemy ORM
+
+---
+
+## 🐛 Future Enhancements
+
+- [ ] Password hashing and encryption
+- [ ] Email notifications for attendance
+- [ ] Parent/Guardian portal
+- [ ] Grade management system
+- [ ] Timetable scheduling
+- [ ] Mobile app version
+- [ ] Advanced reporting with charts
+- [ ] Role-based access control (Admin, Teacher, Student)
+
+---
+
+## 📝 License
+
+This project is open source and available under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**Mohith1-stack** - [GitHub Profile](https://github.com/Mohith1-stack)
+
+---
+
+## 📧 Support & Contributing
+
+We welcome contributions from the community! Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
+
+For issues, questions, or suggestions, please open an issue on the [GitHub repository](https://github.com/Mohith1-stack/TechBuddies/issues).
+
+---
+
+**Last Updated**: April 2026
